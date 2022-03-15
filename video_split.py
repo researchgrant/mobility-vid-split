@@ -82,9 +82,15 @@ def cropVideo(vidPath):
     path=vidPath['path'][0]
     folderName=os.path.dirname(path)
     leftROI = vidPath['leftROI'][0]
-    leftDim = (300,int(300*(leftROI[3]/leftROI[2])))
+    if leftROI[2] > leftROI[3]:
+        leftDim = (300,int(300*(leftROI[3]/leftROI[2])))
+    else:
+        leftDim = (int(300*(leftROI[2]/leftROI[3])),300)
     rightROI = vidPath['rightROI'][0]
-    rightDim = (300,int(300*(rightROI[3]/rightROI[2])))
+    if rightROI[2] > rightROI[3]:
+        rightDim = (300,int(300*(rightROI[3]/rightROI[2])))
+    else:
+        rightDim = (int(300*(rightROI[2]/rightROI[3])),300)
     cap = cv2.VideoCapture(path)
     codec = cv2.VideoWriter_fourcc('X','V','I','D')
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -116,6 +122,7 @@ def cropVideo(vidPath):
 
     leftOut.release()
     rightOut.release()
+
 
 import multiprocessing
 from multiprocessing import Pool
